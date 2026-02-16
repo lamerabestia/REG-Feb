@@ -275,6 +275,12 @@
                 <input type="text" id="input-from" placeholder="From: Your Name" 
                        class="bg-transparent border border-gray-600 text-[#d4af37] placeholder-gray-500 px-4 py-2 text-center rounded focus:outline-none focus:border-[#d4af37] font-body text-sm uppercase tracking-wider">
                 
+                <!-- Version Selector -->
+                <select id="input-version" class="bg-transparent border border-gray-600 text-[#d4af37] px-4 py-2 text-center rounded focus:outline-none focus:border-[#d4af37] font-body text-sm uppercase tracking-wider">
+                    <option value="std" class="bg-black text-[#d4af37]">Version: Standard (Men)</option>
+                    <option value="women" class="bg-black text-[#d4af37]">Version: Women</option>
+                </select>
+
                 <!-- New Copy Link Button -->
                 <button id="copy-link-btn" class="bg-[#d4af37] text-black font-bold py-2 px-4 rounded text-xs uppercase tracking-widest hover:bg-[#fffebb] transition mt-2 flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
@@ -341,7 +347,7 @@
 
         <!-- SCENE 2 (12-18s): Date (Shifted +5s) -->
         <div id="scene-2" class="scene">
-            <img src="https://i.postimg.cc/CMnCQ1Ng/2-Payment-Options-REG-Feb-compressed.png" class="scene-bg" alt="Party Background">
+            <img id="scene-2-bg" src="https://i.postimg.cc/CMnCQ1Ng/2-Payment-Options-REG-Feb-compressed.png" class="scene-bg" alt="Party Background">
             <div class="scene-overlay"></div>
 
             <div class="fade-up text-center" style="transition-delay: 0.1s;">
@@ -443,7 +449,8 @@
             <img src="https://i.postimg.cc/8c620SyK/1-Golden-Carnival-REG-Feb-Compressed.jpg" class="scene-bg" alt="Finale Background">
             <div class="scene-overlay"></div>
 
-            <div class="fade-up text-center mb-12" style="transition-delay: 0.2s;">
+            <!-- Added ID 'price-container' to hide this block for women's version -->
+            <div id="price-container" class="fade-up text-center mb-12" style="transition-delay: 0.2s;">
                  <p id="text-fee-label" class="font-body text-[#d4af37] text-sm uppercase mb-2">Event fee</p>
                  <h2 class="font-title text-6xl text-gold-gradient tracking-tighter drop-shadow-lg">¥25,000</h2>
             </div>
@@ -459,9 +466,8 @@
                 </div>
                 
                 <div class="bg-white p-1 rounded-sm ml-2 shrink-0 shadow-lg shadow-gold/20">
-                    <!-- REPLACE 'https://example.com/rsvp' BELOW WITH YOUR ACTUAL LINK -->
-                    <!-- The QR code image is generated automatically based on the link you put after 'data=' -->
-                    <img src="https://i.postimg.cc/15jVPbZc/IMG-7622.jpg" 
+                    <!-- The QR code image is generated automatically or set by logic -->
+                    <img id="qr-code-img" src="https://i.postimg.cc/15jVPbZc/IMG-7622.jpg" 
                          alt="RSVP QR" 
                          class="w-24 h-24">
                 </div>
@@ -617,6 +623,7 @@
         // Personalization Inputs
         const inputTo = document.getElementById('input-to');
         const inputFrom = document.getElementById('input-from');
+        const inputVersion = document.getElementById('input-version');
         const displayTo = document.getElementById('display-to');
         const displayFrom = document.getElementById('display-from');
         
@@ -906,8 +913,9 @@
             const urlParams = new URLSearchParams(window.location.search);
             const paramTo = urlParams.get('to');
             const paramFrom = urlParams.get('from');
+            const paramVersion = urlParams.get('v'); // v=women
 
-            if (paramTo || paramFrom) {
+            if (paramTo || paramFrom || paramVersion) {
                 // GUEST MODE: Hide inputs, show names from URL
                 document.getElementById('creator-controls').style.display = 'none';
                 
@@ -920,17 +928,29 @@
                     displayFrom.textContent = decodeURIComponent(paramFrom);
                     inputFrom.value = decodeURIComponent(paramFrom);
                 }
+
+                // Check for Women Version in URL
+                if (paramVersion === 'women') {
+                    applyWomenVersion();
+                }
+
             } else {
                 // CREATOR MODE: Enable Copy Link Button
                 document.getElementById('copy-link-btn').addEventListener('click', () => {
                     const baseUrl = window.location.href.split('?')[0];
                     const toVal = encodeURIComponent(inputTo.value);
                     const fromVal = encodeURIComponent(inputFrom.value);
+                    const verVal = inputVersion.value; // Get dropdown value
                     
-                    // Only add params if values exist
+                    // Only add params if values exist or women mode is selected
                     let shareUrl = baseUrl;
-                    if (inputTo.value || inputFrom.value) {
-                        shareUrl = `${baseUrl}?to=${toVal}&from=${fromVal}`;
+                    let params = [];
+                    if (inputTo.value) params.push(`to=${toVal}`);
+                    if (inputFrom.value) params.push(`from=${fromVal}`);
+                    if (verVal === 'women') params.push('v=women');
+
+                    if (params.length > 0) {
+                        shareUrl += '?' + params.join('&');
                     }
                     
                     // FIX: Use execCommand for iframe compatibility
@@ -961,11 +981,79 @@
             }
         });
 
+        function applyWomenVersion() {
+            // 1. Hide Scene 2 Image
+            const s2bg = document.getElementById('scene-2-bg');
+            if(s2bg) s2bg.style.display = 'none';
+
+            // 2. Change QR Code (Women's Line Open Chat)
+            const qr = document.getElementById('qr-code-img');
+            if(qr) qr.src = 'https://i.postimg.cc/pdQcM0HS/Qr-Code.jpg';
+
+            // 3. Hide Price Container (Event Fee & ¥25,000)
+            const priceContainer = document.getElementById('price-container');
+            if(priceContainer) priceContainer.style.display = 'none';
+
+            // 4. Update Text Translations for Scene 8 keys
+            // Override EN
+            translations.en.scan = "RSVP by Joining the Line open Chat";
+            translations.en.payment = ""; // Hide payment text
+            translations.en.other = "";
+            
+            // Override JA
+            translations.ja.scan = "LINEオープンチャットに参加して予約"; 
+            translations.ja.payment = "";
+            translations.ja.other = "";
+
+            // Re-apply language to update UI immediately
+            updateLanguage(currentLang);
+        }
+
+        function applyStandardVersion() {
+            // 1. Show Scene 2 Image
+            const s2bg = document.getElementById('scene-2-bg');
+            if(s2bg) s2bg.style.display = 'block';
+
+            // 2. Restore Standard QR Code (Payment)
+            const qr = document.getElementById('qr-code-img');
+            if(qr) qr.src = 'https://i.postimg.cc/15jVPbZc/IMG-7622.jpg';
+
+            // 3. Show Price Container
+            const priceContainer = document.getElementById('price-container');
+            if(priceContainer) priceContainer.style.display = 'block';
+
+            // 4. Restore Standard Text Translations
+            // Restore EN
+            translations.en.scan = "Scan to Pay";
+            translations.en.payment = "Payment via PayPay or Bank Transfer";
+            translations.en.other = "Other options? Message us.";
+            
+            // Restore JA
+            translations.ja.scan = "お支払い方法";
+            translations.ja.payment = "PayPayまたは<br>銀行振込";
+            translations.ja.other = "その他のオプションはメッセージまで";
+
+            // Re-apply language
+            updateLanguage(currentLang);
+        }
+
         function startSequence() {
             // APPLY PERSONALIZATION (If in Creator Mode)
             // If in Guest Mode, values are already set by DOMContentLoaded
             if(inputTo.value.trim() !== "") displayTo.textContent = inputTo.value;
             if(inputFrom.value.trim() !== "") displayFrom.textContent = inputFrom.value;
+            
+            // Apply Version based on dropdown (Creator Mode) or existing state
+            // If the URL parameter 'v=women' was present, applyWomenVersion was already called in DOMContentLoaded.
+            // If we are in creator mode, we respect the dropdown.
+            const creatorControls = document.getElementById('creator-controls');
+            if (creatorControls.style.display !== 'none') {
+                if (inputVersion.value === 'women') {
+                    applyWomenVersion();
+                } else {
+                    applyStandardVersion();
+                }
+            }
 
             overlay.style.opacity = '0';
             setTimeout(() => overlay.style.display = 'none', 500);
