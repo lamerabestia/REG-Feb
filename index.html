@@ -12,6 +12,9 @@
         .font-title { font-family: 'Cinzel', serif; }
         .font-body { font-family: 'Lato', sans-serif; }
         .font-cursive { font-family: 'Great Vibes', cursive; }
+        /* Japanese font fallback */
+        body.lang-ja .font-title, 
+        body.lang-ja .font-body { font-family: 'Cinzel', 'Noto Serif JP', serif; }
         
         /* Metallic Gold Gradient Text */
         .text-gold-gradient {
@@ -197,6 +200,18 @@
         #mute-btn { right: 20px; }
         #pause-btn { right: 70px; }
         #rewind-btn { right: 120px; }
+        #lang-btn { 
+            left: 20px; 
+            top: 20px; 
+            width: auto; 
+            padding: 8px 12px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-family: 'Lato', sans-serif;
+            font-weight: bold;
+            opacity: 1 !important; 
+            pointer-events: auto !important;
+        }
 
         /* Hidden YouTube Player */
         #youtube-player-container {
@@ -227,6 +242,8 @@
         <div class="vignette"></div>
 
         <!-- Control Buttons -->
+        <button id="lang-btn" class="control-btn visible" title="Switch Language">EN | JP</button>
+
         <button id="rewind-btn" class="control-btn" title="Rewind 5s">
              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 19 2 12 11 5 11 19"></polygon><polygon points="22 19 13 12 22 5 22 19"></polygon></svg>
         </button>
@@ -252,7 +269,7 @@
             <!-- CREATOR CONTROLS (Input Fields) -->
             <!-- These are visible by default but HIDDEN if a shared link is opened -->
             <div id="creator-controls" class="mb-6 flex flex-col gap-3 w-full max-w-xs transition-all duration-300">
-                <p class="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Personalize Invitation</p>
+                <p id="lbl-personalize" class="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Personalize Invitation</p>
                 <input type="text" id="input-to" placeholder="To: Guest Name" 
                        class="bg-transparent border border-gray-600 text-[#d4af37] placeholder-gray-500 px-4 py-2 text-center rounded focus:outline-none focus:border-[#d4af37] font-body text-sm uppercase tracking-wider">
                 <input type="text" id="input-from" placeholder="From: Your Name" 
@@ -261,9 +278,9 @@
                 <!-- New Copy Link Button -->
                 <button id="copy-link-btn" class="bg-[#d4af37] text-black font-bold py-2 px-4 rounded text-xs uppercase tracking-widest hover:bg-[#fffebb] transition mt-2 flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                    Copy Link to Send
+                    <span id="text-copy-link">Copy Link to Send</span>
                 </button>
-                <p id="copy-feedback" class="text-green-400 text-xs mt-1 hidden">Link copied to clipboard!</p>
+                <p id="copy-feedback" class="text-green-400 text-xs mt-1 hidden">Link copied!</p>
             </div>
 
             <!-- Music Upload -->
@@ -286,7 +303,7 @@
             <!-- Background Image Removed for Scene 0 -->
             
             <div class="fade-up text-center w-full px-2">
-                <p class="font-body text-[#d4af37] text-xs uppercase tracking-widest mb-4">An Exclusive Invitation For</p>
+                <p id="text-invite-for" class="font-body text-[#d4af37] text-xs uppercase tracking-widest mb-4">An Exclusive Invitation For</p>
                 <!-- Large Cursive Guest Name -->
                 <h2 id="display-to" class="font-cursive text-gold-gradient text-7xl md:text-8xl leading-tight mb-8 drop-shadow-lg break-words">
                     Distinguished Guest
@@ -294,7 +311,7 @@
                 
                 <div class="w-16 h-[1px] bg-[#d4af37] mx-auto mb-8 opacity-60"></div>
                 
-                <p class="font-body text-[#d4af37] text-[10px] uppercase tracking-widest mb-2">From</p>
+                <p id="text-from" class="font-body text-[#d4af37] text-[10px] uppercase tracking-widest mb-2">From</p>
                 <!-- Large Cursive Host Name -->
                 <p id="display-from" class="font-cursive text-white text-5xl md:text-6xl tracking-wide drop-shadow-md">
                     R.E.G.
@@ -307,17 +324,17 @@
             <img src="https://i.postimg.cc/8c620SyK/1-Golden-Carnival-REG-Feb-Compressed.jpg" class="scene-bg" alt="Title Background">
             <div class="scene-overlay"></div>
             
-            <p class="font-body text-[#fffebb] text-[10px] md:text-xs uppercase tracking-[0.25em] mb-6 fade-up opacity-90" style="transition-delay: 0.2s;">
+            <p id="text-presents" class="font-body text-[#fffebb] text-[10px] md:text-xs uppercase tracking-[0.25em] mb-6 fade-up opacity-90" style="transition-delay: 0.2s;">
                 R.E.G. Presents
             </p>
 
-            <h1 class="font-title text-5xl md:text-6xl text-gold-gradient text-center leading-tight tracking-normal fade-up" style="transition-delay: 0.6s;">
+            <h1 id="text-title" class="font-title text-5xl md:text-6xl text-gold-gradient text-center leading-tight tracking-normal fade-up" style="transition-delay: 0.6s;">
                 GOLDEN<br>CARNIVAL
             </h1>
             
             <div class="divider-gold fade-up" style="transition-delay: 1.0s;"></div>
 
-            <p class="font-title text-gold-gradient text-lg tracking-wide fade-up" style="transition-delay: 1.2s;">
+            <p id="text-rsvp" class="font-title text-gold-gradient text-lg tracking-wide fade-up" style="transition-delay: 1.2s;">
                 STRICTLY RSVP ONLY 
             </p>
         </div>
@@ -328,10 +345,10 @@
             <div class="scene-overlay"></div>
 
             <div class="fade-up text-center" style="transition-delay: 0.1s;">
-                <p class="font-body text-[#d4af37] text-xs uppercase tracking-widest mb-4">Save the Date</p>
-                <h2 class="font-title text-4xl text-white mb-2">Saturday</h2>
-                <h2 class="font-title text-5xl text-gold-gradient mb-1">Feb 28th</h2>
-                <p class="font-title text-white text-xl mt-2">2026</p>
+                <p id="text-save-date" class="font-body text-[#d4af37] text-xs uppercase tracking-widest mb-4">Save the Date</p>
+                <h2 id="text-day" class="font-title text-4xl text-white mb-2">Saturday</h2>
+                <h2 id="text-date" class="font-title text-5xl text-gold-gradient mb-1">Feb 28th</h2>
+                <p id="text-year" class="font-title text-white text-xl mt-2">2026</p>
             </div>
             <div class="my-4 fade-up text-center" style="transition-delay: 0.2s;">
                 <p class="font-body text-4xl text-white font-light tracking-[0.1em] border-b border-[#d4af37] pb-2">18:00–23:00</p>
@@ -344,8 +361,8 @@
             <div class="scene-overlay"></div>
 
             <div class="fade-up text-center px-6 mt-8" style="transition-delay: 0.6s;">
-                <p class="font-body text-[#d4af37] text-xs uppercase tracking-widest mb-2 font-bold">Venue</p>
-                <p class="font-title text-white text-2xl leading-relaxed">
+                <p id="text-venue-label" class="font-body text-[#d4af37] text-xs uppercase tracking-widest mb-2 font-bold">Venue</p>
+                <p id="text-venue" class="font-title text-white text-2xl leading-relaxed">
                     Luxury Suite Room<br>Central Tokyo Hotel
                 </p>
             </div>
@@ -358,10 +375,10 @@
 
             <div class="fade-up px-8 text-center" style="transition-delay: 0.2s;">
                 <p class="font-title text-white text-lg md:text-xl leading-relaxed tracking-wide">
-                    An evening of <br>
-                    <span class="text-gold-gradient text-2xl font-bold">Elevated Celebration</span>
+                    <span id="text-exp-1">An evening of</span><br>
+                    <span id="text-exp-2" class="text-gold-gradient text-2xl font-bold">Elevated Celebration</span>
                 </p>
-                <p class="font-body text-gray-300 text-sm mt-4">and unforgettable energy.</p>
+                <p id="text-exp-3" class="font-body text-gray-300 text-sm mt-4">and unforgettable energy.</p>
             </div>
         </div>
 
@@ -377,12 +394,12 @@
             <div class="scene-overlay"></div>
 
             <div class="w-full text-center fade-up" style="transition-delay: 0.2s;">
-                <p class="font-title text-[#d4af37] text-2xl mb-4 border-b border-white/20 inline-block pb-2">Dress Code</p>
-                <p class="font-title text-white text-3xl mb-4">ELEGANT</p>
+                <p id="text-dc-label" class="font-title text-[#d4af37] text-2xl mb-4 border-b border-white/20 inline-block pb-2">Dress Code</p>
+                <p id="text-dc-main" class="font-title text-white text-3xl mb-4">ELEGANT</p>
                 <div class="bg-black/40 p-4 rounded backdrop-blur-sm mx-4">
-                    <p class="font-body text-gray-200 text-sm">Gents: Suit</p>
-                    <p class="font-body text-gray-200 text-sm">Ladies: Red /  Black / White / Gold</p>
-                    <p class="font-body text-[#fffebb] text-1x1 italic mt-2">Golden accessories encouraged ✨</p>
+                    <p id="text-dc-gents" class="font-body text-gray-200 text-sm">Gents: Suit</p>
+                    <p id="text-dc-ladies" class="font-body text-gray-200 text-sm">Ladies: Red /  Black / White / Gold</p>
+                    <p id="text-dc-note" class="font-body text-[#fffebb] text-1x1 italic mt-2">Golden accessories encouraged ✨</p>
                 </div>
             </div>
         </div>
@@ -416,8 +433,8 @@
             <div class="scene-overlay"></div>
             
             <div class="fade-up text-center relative z-20">
-                 <h2 class="font-title text-4xl text-gold-gradient tracking-[0.3em] drop-shadow-xl">PAST EVENTS</h2>
-                 <p class="font-body text-[#fffebb] text-xs uppercase tracking-widest mt-2">Unforgettable Moments</p>
+                 <h2 id="text-past-events" class="font-title text-4xl text-gold-gradient tracking-[0.3em] drop-shadow-xl">PAST EVENTS</h2>
+                 <p id="text-memories" class="font-body text-[#fffebb] text-xs uppercase tracking-widest mt-2">Unforgettable Moments</p>
             </div>
         </div>
 
@@ -427,17 +444,17 @@
             <div class="scene-overlay"></div>
 
             <div class="fade-up text-center mb-12" style="transition-delay: 0.2s;">
-                 <p class="font-body text-[#d4af37] text-sm uppercase mb-2">Event fee</p>
+                 <p id="text-fee-label" class="font-body text-[#d4af37] text-sm uppercase mb-2">Event fee</p>
                  <h2 class="font-title text-6xl text-gold-gradient tracking-tighter drop-shadow-lg">¥25,000</h2>
             </div>
 
             <div class="w-full flex items-end justify-between fade-up px-6" style="transition-delay: 0.5s;">
                 <div class="text-left flex-1">
-                    <p class="font-body text-white text-sm font-bold uppercase mb-1 tracking-wider">Scan to Pay</p>
+                    <p id="text-scan" class="font-body text-white text-sm font-bold uppercase mb-1 tracking-wider">Scan to Pay</p>
                     
                     <div class="text-[10px] text-gray-300 leading-tight border-l-2 border-[#d4af37] pl-2 mt-2">
-                        <p class="text-[#d4af37] mb-0.5 font-bold">Payment via PayPay or Bank Transfer</p>
-                        <p>Other options? Message us.</p>
+                        <p id="text-payment" class="text-[#d4af37] mb-0.5 font-bold">Payment via PayPay or Bank Transfer</p>
+                        <p id="text-other">Other options? Message us.</p>
                     </div>
                 </div>
                 
@@ -585,6 +602,7 @@
         const muteBtn = document.getElementById('mute-btn');
         const pauseBtn = document.getElementById('pause-btn');
         const rewindBtn = document.getElementById('rewind-btn');
+        const langBtn = document.getElementById('lang-btn');
         const iconPause = document.getElementById('icon-pause');
         const iconPlay = document.getElementById('icon-play');
         const audio = document.getElementById('bg-audio');
@@ -599,6 +617,151 @@
         
         const totalDuration = 60500;
         
+        // LANGUAGE SETTINGS
+        const translations = {
+            en: {
+                invite_for: "An Exclusive Invitation For",
+                from: "From",
+                presents: "R.E.G. Presents",
+                title: "GOLDEN<br>CARNIVAL",
+                rsvp_only: "STRICTLY RSVP ONLY",
+                save_date: "Save the Date",
+                day: "Saturday",
+                date: "Feb 28th",
+                year: "2026",
+                venue_label: "Venue",
+                venue: "Luxury Suite Room<br>Central Tokyo Hotel",
+                exp_1: "An evening of",
+                exp_2: "Elevated Celebration",
+                exp_3: "and unforgettable energy.",
+                dc_label: "Dress Code",
+                dc_main: "ELEGANT",
+                dc_gents: "Gents: Suit",
+                dc_ladies: "Ladies: Red / Black / White / Gold",
+                dc_note: "Golden accessories encouraged ✨",
+                past_events: "PAST EVENTS",
+                memories: "Unforgettable Moments",
+                fee_label: "Event fee",
+                scan: "Scan to Pay",
+                payment: "Payment via PayPay or Bank Transfer",
+                other: "Other options? Message us.",
+                lbl_personalize: "Personalize Invitation",
+                lbl_music: "Add Music (Optional)",
+                btn_play: "Play Me!",
+                btn_copy: "Copy Link to Send",
+                copy_fb: "Link copied!",
+                ph_to: "To: Guest Name",
+                ph_from: "From: Your Name"
+            },
+            ja: {
+                invite_for: "特別なご招待",
+                from: "送り主",
+                presents: "R.E.G. Presents",
+                title: "GOLDEN<br>CARNIVAL",
+                rsvp_only: "完全招待制",
+                save_date: "開催日",
+                day: "土曜日",
+                date: "2月28日",
+                year: "2026年",
+                venue_label: "会場",
+                venue: "都心ホテル<br>ラグジュアリースイート",
+                exp_1: "一夜限りの",
+                exp_2: "極上のセレブレーション",
+                exp_3: "忘れられない熱狂を。",
+                dc_label: "ドレスコード",
+                dc_main: "エレガント",
+                dc_gents: "男性：スーツ",
+                dc_ladies: "女性：赤 / 黒 / 白 / ゴールド",
+                dc_note: "ゴールドのアクセサリー推奨 ✨",
+                past_events: "過去のイベント",
+                memories: "思い出の瞬間",
+                fee_label: "会費",
+                scan: "スキャンして支払う",
+                payment: "PayPayまたは銀行振込",
+                other: "その他のオプションはメッセージまで",
+                lbl_personalize: "招待状をパーソナライズ",
+                lbl_music: "音楽を追加 (任意)",
+                btn_play: "再生する",
+                btn_copy: "リンクをコピー",
+                copy_fb: "リンクをコピーしました！",
+                ph_to: "宛先: ゲスト名",
+                ph_from: "差出人: あなたの名前"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function updateLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            // Toggle body class for font adjustments
+            if(lang === 'ja') document.body.classList.add('lang-ja');
+            else document.body.classList.remove('lang-ja');
+
+            // Helper to set text by ID
+            const setTxt = (id, txt) => {
+                const el = document.getElementById(id);
+                if(el) el.innerHTML = txt;
+            };
+            const setPh = (id, txt) => {
+                const el = document.getElementById(id);
+                if(el) el.placeholder = txt;
+            };
+
+            setTxt('text-invite-for', t.invite_for);
+            setTxt('text-from', t.from);
+            setTxt('text-presents', t.presents);
+            setTxt('text-title', t.title);
+            setTxt('text-rsvp', t.rsvp_only);
+            setTxt('text-save-date', t.save_date);
+            setTxt('text-day', t.day);
+            setTxt('text-date', t.date);
+            setTxt('text-year', t.year);
+            setTxt('text-venue-label', t.venue_label);
+            setTxt('text-venue', t.venue);
+            setTxt('text-exp-1', t.exp_1);
+            setTxt('text-exp-2', t.exp_2);
+            setTxt('text-exp-3', t.exp_3);
+            setTxt('text-dc-label', t.dc_label);
+            setTxt('text-dc-main', t.dc_main);
+            setTxt('text-dc-gents', t.dc_gents);
+            setTxt('text-dc-ladies', t.dc_ladies);
+            setTxt('text-dc-note', t.dc_note);
+            setTxt('text-past-events', t.past_events);
+            setTxt('text-memories', t.memories);
+            setTxt('text-fee-label', t.fee_label);
+            setTxt('text-scan', t.scan);
+            setTxt('text-payment', t.payment);
+            setTxt('text-other', t.other);
+            setTxt('lbl-personalize', t.lbl_personalize);
+            setTxt('music-label', t.lbl_music);
+            setTxt('play-btn', t.btn_play);
+            // Only set copy button text specifically, keeping icon
+            const copyBtnText = document.getElementById('text-copy-link');
+            if(copyBtnText) copyBtnText.innerText = t.btn_copy;
+            
+            setTxt('copy-feedback', t.copy_fb);
+            setPh('input-to', t.ph_to);
+            setPh('input-from', t.ph_from);
+        }
+
+        // Initialize Language based on Browser
+        function initLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.startsWith('ja')) {
+                updateLanguage('ja');
+            } else {
+                updateLanguage('en');
+            }
+        }
+
+        // Language Toggle Button
+        langBtn.addEventListener('click', () => {
+            if (currentLang === 'en') updateLanguage('ja');
+            else updateLanguage('en');
+        });
+
         // YOUTUBE PLAYER SETUP
         let player;
         let youtubeVideoID = 'RJR4GU0_WYA'; // Hardcoded ID from your link
@@ -730,6 +893,8 @@
 
         // Check URL Params for Personalization (Guest Mode)
         document.addEventListener('DOMContentLoaded', () => {
+            initLanguage(); // Set initial language based on browser
+
             const urlParams = new URLSearchParams(window.location.search);
             const paramTo = urlParams.get('to');
             const paramFrom = urlParams.get('from');
@@ -816,6 +981,7 @@
             muteBtn.classList.add('visible');
             pauseBtn.classList.add('visible');
             rewindBtn.classList.add('visible');
+            langBtn.classList.add('visible');
             
             startTime = Date.now();
             runLoop();
@@ -844,6 +1010,7 @@
                     muteBtn.classList.remove('visible');
                     pauseBtn.classList.remove('visible');
                     rewindBtn.classList.remove('visible');
+                    langBtn.classList.remove('visible');
 
                     // Reset all
                     document.querySelectorAll('.scene').forEach(s => {
