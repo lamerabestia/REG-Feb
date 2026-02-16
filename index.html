@@ -439,7 +439,7 @@
         </div>
 
         <!-- SCENE 8 (52-60.5s): Price & Action (Shifted +5s) -->
-        <div id="scene-8" class="scene">
+        <div id="scene-8" class="scene justify-end pb-12">
             <img src="https://i.postimg.cc/8c620SyK/1-Golden-Carnival-REG-Feb-Compressed.jpg" class="scene-bg" alt="Finale Background">
             <div class="scene-overlay"></div>
 
@@ -466,6 +466,11 @@
                          class="w-24 h-24">
                 </div>
             </div>
+
+            <!-- New Cancellation Footnote -->
+            <p id="text-cancel" class="text-[8px] text-gray-500 mt-4 px-6 text-center leading-tight opacity-70">
+                Change of Plans? We get it, things come up. If you need to cancel 3 days or more before the event - you'll get a full refund. Less than 3 days, and we might not be able to refund, but let's chat if that happens.
+            </p>
         </div>
 
         <!-- Progress Bar -->
@@ -651,33 +656,34 @@
                 btn_copy: "Copy Link to Send",
                 copy_fb: "Link copied!",
                 ph_to: "To: Guest Name",
-                ph_from: "From: Your Name"
+                ph_from: "From: Your Name",
+                cancel_policy: "Change of Plans? We get it, things come up. If you need to cancel 3 days or more before the event - you'll get a full refund. Less than 3 days, and we might not be able to refund, but let's chat if that happens."
             },
             ja: {
                 invite_for: "特別なご招待",
                 from: "送り主",
                 presents: "R.E.G. Presents",
-                title: "GOLDEN<br>CARNIVAL",
+                title: "ゴールデン<br>カーニバル",
                 rsvp_only: "完全招待制",
                 save_date: "開催日",
                 day: "土曜日",
                 date: "2月28日",
                 year: "2026年",
                 venue_label: "会場",
-                venue: "都心ホテル<br>ラグジュアリースイート",
+                venue: "都心ホテル<br>ラグジュアリー<br>スイート",
                 exp_1: "一夜限りの",
                 exp_2: "極上のセレブレーション",
                 exp_3: "忘れられない熱狂を。",
                 dc_label: "ドレスコード",
                 dc_main: "エレガント",
                 dc_gents: "男性：スーツ",
-                dc_ladies: "女性：赤 / 黒 / 白 / ゴールド",
-                dc_note: "ゴールドのアクセサリー推奨 ✨",
-                past_events: "過去のイベント",
+                dc_ladies: "女性：赤 / 黒 / 白  <br>ゴールデン",
+                dc_note: "ゴールデンアクセサリー<br>推奨 ✨",
+                past_events: "過去の<br>イベント",
                 memories: "思い出の瞬間",
-                fee_label: "会費",
-                scan: "スキャンして支払う",
-                payment: "PayPayまたは銀行振込",
+                fee_label: "参加費",
+                scan: "お支払い方法",
+                payment: "PayPayまたは<br>銀行振込",
                 other: "その他のオプションはメッセージまで",
                 lbl_personalize: "招待状をパーソナライズ",
                 lbl_music: "音楽を追加 (任意)",
@@ -685,7 +691,8 @@
                 btn_copy: "リンクをコピー",
                 copy_fb: "リンクをコピーしました！",
                 ph_to: "宛先: ゲスト名",
-                ph_from: "差出人: あなたの名前"
+                ph_from: "差出人: あなたの名前",
+                cancel_policy: "急な予定変更があることは理解しています。イベントの3日前までのキャンセルであれば、全額返金いたします。3日を切っている場合は返金が難しい場合がありますが、その際はご相談ください。"
             }
         };
 
@@ -742,6 +749,7 @@
             if(copyBtnText) copyBtnText.innerText = t.btn_copy;
             
             setTxt('copy-feedback', t.copy_fb);
+            setTxt('text-cancel', t.cancel_policy);
             setPh('input-to', t.ph_to);
             setPh('input-from', t.ph_from);
         }
@@ -764,7 +772,7 @@
 
         // YOUTUBE PLAYER SETUP
         let player;
-        let youtubeVideoID = 'RJR4GU0_WYA'; // Hardcoded ID from your link
+        let youtubeVideoID = 'NFcJ4JhQOL8'; // Hardcoded ID from your link
         let usingFileAudio = false;
 
         function onYouTubeIframeAPIReady() {
