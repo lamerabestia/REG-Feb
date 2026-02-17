@@ -431,7 +431,7 @@
                 <img src="https://i.postimg.cc/Hkpgjk4V/REG_Feb_Pic_12.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 15">
                 <img src="https://i.postimg.cc/KzgXCkxF/REG_Feb_Pic_18.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 16">
                 <img src="https://i.postimg.cc/fT7sw9dG/REG_Feb_Pic_11.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 17">
-                <img src="https://i.postimg.cc/8CcgBXYc/REG_Feb_Pic_14.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 18">
+                <img src="https://i.postimg.cc/8CcgBXYc/REG_Feb_Pic_14.jpg?.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 18">
                 <img src="https://i.postimg.cc/Gtw0RLmt/REG_Feb_Pic_19.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 19">
                 <img src="https://i.postimg.cc/85r8xJNP/REG_Feb_Pic_21.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 20">
             </div>
@@ -486,7 +486,7 @@
     <script>
         // YOUTUBE PLAYER SETUP
         let player;
-        let youtubeVideoID = '-d72XNa4yIM'; // Hardcoded ID from your link
+        let youtubeVideoID = 'MveDLwDIZiI'; // Fixed Video ID
         let usingFileAudio = false;
         let isPlayerReady = false;
 
@@ -504,13 +504,20 @@
                     'playsinline': 1,
                     'controls': 0,
                     'loop': 1,
-                    'playlist': youtubeVideoID // Required for loop
+                    'playlist': youtubeVideoID, // Required for loop
+                    'origin': window.location.origin
                 },
                 events: {
                     'onReady': onPlayerReady
                 }
             });
         };
+
+        // Inject YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         /**
          * FALLING GOLD DUST ENGINE
