@@ -431,7 +431,7 @@
                 <img src="https://i.postimg.cc/Hkpgjk4V/REG_Feb_Pic_12.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 15">
                 <img src="https://i.postimg.cc/KzgXCkxF/REG_Feb_Pic_18.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 16">
                 <img src="https://i.postimg.cc/fT7sw9dG/REG_Feb_Pic_11.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 17">
-                <img src="https://i.postimg.cc/8CcgBXYc/REG_Feb_Pic_14.jpg?.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 18">
+                <img src="https://i.postimg.cc/8CcgBXYc/REG_Feb_Pic_14.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 18">
                 <img src="https://i.postimg.cc/Gtw0RLmt/REG_Feb_Pic_19.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 19">
                 <img src="https://i.postimg.cc/85r8xJNP/REG_Feb_Pic_21.jpg?auto=format&fit=crop&w=600&q=80" class="gallery-img" alt="Gallery 20">
             </div>
@@ -483,15 +483,35 @@
         <div id="progress-bar" class="fixed bottom-0 left-0 h-1 bg-gradient-to-r from-[#d4af37] to-[#fffebb] z-50 transition-all duration-100 ease-linear" style="width: 0%;"></div>
     </div>
 
-    <!-- YouTube API Script Injection -->
     <script>
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    </script>
+        // YOUTUBE PLAYER SETUP
+        let player;
+        let youtubeVideoID = 'd72XNa4yIM'; // Hardcoded ID from your link
+        let usingFileAudio = false;
+        let isPlayerReady = false;
 
-    <script>
+        function onPlayerReady(event) {
+            isPlayerReady = true;
+        }
+
+        // Must be on window to be called by YouTube API
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('youtube-player', {
+                height: '1',
+                width: '1',
+                videoId: youtubeVideoID,
+                playerVars: {
+                    'playsinline': 1,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': youtubeVideoID // Required for loop
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        };
+
         /**
          * FALLING GOLD DUST ENGINE
          */
@@ -777,32 +797,6 @@
             else updateLanguage('en');
         });
 
-        // YOUTUBE PLAYER SETUP
-        let player;
-        let youtubeVideoID = 'NFcJ4JhQOL8'; // Hardcoded ID from your link
-        let usingFileAudio = false;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '1',
-                width: '1',
-                videoId: youtubeVideoID,
-                playerVars: {
-                    'playsinline': 1,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': youtubeVideoID // Required for loop
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            // Player is ready
-        }
-
         // Music Upload Handler (Overrides YouTube)
         musicUpload.addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -1001,7 +995,7 @@
             translations.en.other = "";
             
             // Override JA
-            translations.ja.scan = "LINEオープンチャットに参加して予約"; 
+            translations.ja.scan = "RSVPはLINEオープンチャット参加にてお願いします"; 
             translations.ja.payment = "";
             translations.ja.other = "";
 
@@ -1068,7 +1062,7 @@
             if (usingFileAudio && audio.src) {
                 audio.currentTime = 0;
                 audio.play().catch(e => console.log("Audio play failed:", e));
-            } else if (player && player.playVideo) {
+            } else if (player && isPlayerReady && player.playVideo) {
                 player.seekTo(0);
                 player.playVideo();
             }
