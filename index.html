@@ -79,14 +79,13 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             z-index: -2;
-            transform: scale(1.1);
-            transition: transform 10s ease-out; /* Slow zoom effect */
+            transition: opacity 1s ease-out;
         }
         
         .active .scene-bg {
-            transform: scale(1.0);
+            opacity: 1;
         }
 
         /* Gallery Image Styling */
@@ -95,7 +94,7 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             z-index: -2;
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
@@ -486,7 +485,7 @@
     <script>
         // YOUTUBE PLAYER SETUP
         let player;
-        let youtubeVideoID = 'MveDLwDIZiI'; // Fixed Video ID
+        let youtubeVideoID = '-d72XNa4yIM'; // Fixed Video ID
         let usingFileAudio = false;
         let isPlayerReady = false;
 
@@ -919,6 +918,7 @@
             if (paramTo || paramFrom || paramVersion) {
                 // GUEST MODE: Hide inputs, show names from URL
                 document.getElementById('creator-controls').style.display = 'none';
+                document.getElementById('music-upload-container').style.display = 'none';
                 
                 if (paramTo) {
                     displayTo.textContent = decodeURIComponent(paramTo);
